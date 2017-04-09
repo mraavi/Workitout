@@ -1,12 +1,14 @@
 package com.appcrops.workitout;
 
+import android.content.Context;
+
 /**
  * Created by mraavi on 08/04/17.
  */
 
 public class WorkoutDataModel {
-    private static enum Group{
-        NAME("", 1),
+    public static enum Group{
+        WORKOUT_NAME("", 1),
         NUM_OF_SETS("", 1),
         EXCERCISES("Excercise", 1),
         ADD_EXCERCISES("", 1),
@@ -20,42 +22,23 @@ public class WorkoutDataModel {
             this.name = name;
             this.numOfchildren = numOfChildern;
         }
+    }
 
-       /* public String getName(int index) {
-
-            String name = "";
-            switch (Groups.values()[index]) {
-                case NAME:
-                    name = "";
-                    break;
-                case NUM_OF_SETS:
-                    name = "";
-                    break;
-                case EXCERCISES:
-                    name = "";
-                    break;
-                case ADD_EXCERCISES:
-                    name = "Excercises";
-                    break;
-                case REST:
-                    name = "";
-                    break;
-                case WARPUP:
-                    name = "";
-                    break;
-            }
-            return name;
-        }*/
+    public class WorkoutProperty{
+        public String name;
+        public String value;
+        public Group type;
     }
 
     private Workout mWorkout;
+    private Context mContext;
 
-    public WorkoutDataModel() {
-        Workout workout = new Workout();
+    public WorkoutDataModel(Context context) {
+        mContext = context;
+        mWorkout = new Workout();
         addExcercise();
 
         Group.EXCERCISES.numOfchildren = getNumOfExcercises();
-
     }
 
     public void addExcercise() {
@@ -88,58 +71,52 @@ public class WorkoutDataModel {
     public String getGroupName(int groupIndex) {
         Group group = Group.values()[groupIndex];
         return group.name;
-        //return Groups.getName(groupIndex);
     }
 
     public int getNumOfChildernInGroup(int groupIndex) {
         Group group = Group.values()[groupIndex];
         return group.numOfchildren;
-        /*int numOfChildern = 0;
-        switch (Groups.values()[groupIndex]) {
-            case NAME:
-                numOfChildern = 1;
-                break;
-            case NUM_OF_SETS:
-                numOfChildern = 1;
-                break;
-            case EXCERCISES:
-                numOfChildern =  mWorkout.getExcercises().size();
-                break;
-            case ADD_EXCERCISES:
-                numOfChildern = 1;
-                break;
-            case REST:
-                numOfChildern = 2;
-                break;
-            case WARPUP:
-                numOfChildern = 2;
-                break;
-        }
-        return numOfChildern;*/
     }
 
-    /*public String getChaildName(int groupIndex, int chaildIndex) {
-        String name = "";
-        switch (Groups.values()[groupIndex]) {
-            case NAME:
-                name = mWorkout.getName();
+    public Object getChaild(int groupIndex, int chaildIndex) {
+        WorkoutProperty child = new WorkoutProperty();
+        switch (Group.values()[groupIndex]) {
+            case WORKOUT_NAME:
+                child.name = mContext.getString(R.string.workout_name);
+                child.value = mWorkout.getName();
                 break;
             case NUM_OF_SETS:
-                name = String.valueOf(mWorkout.getNumOfSets());
+                child.name = mContext.getString(R.string.num_of_sets);
+                child.value = String.valueOf(mWorkout.getNumOfSets());
                 break;
             case EXCERCISES:
-                name = String.valueOf(mWorkout.getExcercises().get(chaildIndex));
+                Excercise excercise = mWorkout.getExcercises().get(chaildIndex);
+                child.name = excercise.getName();
+                child.value = String.valueOf(excercise.getDuration());
                 break;
             case ADD_EXCERCISES:
-                name = "Add Excercise";
+                child.name = mContext.getString(R.string.add_excercise);
                 break;
             case REST:
-                if (chaildIndex == )
+                if (chaildIndex == 0) {
+                    child.name = mContext.getString(R.string.rest_bet_sets);
+                    child.value = String.valueOf(mWorkout.getRestDurationBetweenSets());
+                } else {
+                    child.name = mContext.getString(R.string.rest_bet_exercise);
+                    child.value = String.valueOf(mWorkout.getRestDurationBetweenExercises());
+                }
                 break;
             case WARPUP:
-                name = "";
+                if (chaildIndex == 0) {
+                    child.name = mContext.getString(R.string.warmup);
+                    child.value = String.valueOf(mWorkout.getWarmUpDuration());
+                } else {
+                    child.name = mContext.getString(R.string.cooldown);
+                    child.value = String.valueOf(mWorkout.getCoolDownDuration());
+                }
                 break;
         }
-        return name;
-    }*/
+        child.type = Group.values()[groupIndex];
+        return child;
+    }
 }

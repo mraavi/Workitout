@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Workitout</string>
+    <string name="workout_name">Workout Name</string>
+    <string name="num_of_sets">Numer Of Sets</string>
+    <string name="rest_bet_exercise">Rest between Excercises</string>
+    <string name="rest_bet_sets">Rest between Sets</string>
+    <string name="warmup">Warm up</string>
+    <string name="cooldown">Cool down</string>
+    <string name="add_excercise">Add excercise</string>
+    <string name="default_excercise_name">Excercise</string>
+    <string name="default_workout_name">Default workout name</string>
 </resources>

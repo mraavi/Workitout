@@ -1,12 +1,12 @@
 package com.appcrops.workitout;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 /**
  * Created by mraavi on 08/04/17.
@@ -14,47 +14,32 @@ import java.util.HashMap;
 
 public class WorkoutAdapter extends BaseExpandableListAdapter {
 
-    HashMap<String, ArrayList<String>> mLivingBeings;
-    ArrayList<String> mLivingBeingGroups;
+    WorkoutDataModel mWorkoutDataModel;
     Context mContext;
 
-    public WorkoutAdapter(Context context, HashMap<String, ArrayList<String>> livingBeings, ArrayList<String> livingBeingGroups) {
-        mLivingBeings = livingBeings;
-        mLivingBeingGroups = livingBeingGroups;
+    public WorkoutAdapter(Context context, WorkoutDataModel workoutDataModel) {
+        mWorkoutDataModel = workoutDataModel;
         mContext = context;
     }
 
     @Override
     public int getGroupCount() {
-        if (mLivingBeings != null) {
-            return mLivingBeings.size();
-        }
-        return 0;
+        return mWorkoutDataModel.getNumOfGroups();
     }
 
     @Override
     public int getChildrenCount(int groupIndex) {
-        if (mLivingBeings != null && mLivingBeingGroups != null) {
-            return mLivingBeings.get(mLivingBeingGroups.get(groupIndex)).size();
-        }
-        return 0;
+        return mWorkoutDataModel.getNumOfChildernInGroup(groupIndex);
     }
 
     @Override
     public Object getGroup(int groupIndex) {
-        if (mLivingBeingGroups != null) {
-            return mLivingBeingGroups.get(groupIndex);
-        }
-        return null;
+        return mWorkoutDataModel.getGroupName(groupIndex);
     }
 
     @Override
     public Object getChild(int groupIndex, int childIndex) {
-        if (mLivingBeings != null && mLivingBeingGroups != null) {
-            return mLivingBeings.get(mLivingBeingGroups.get(groupIndex)).get(childIndex);
-        }
-
-        return null;
+        return mWorkoutDataModel.getChaild(groupIndex, childIndex);
     }
 
     @Override
@@ -75,34 +60,48 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupIndex, boolean b, View view, ViewGroup viewGroup) {
 
-        /*if (view == null) {
+        if (view == null) {
             LayoutInflater infalInflater = LayoutInflater.from(mContext);
-            view = infalInflater.inflate(R.layout.listview_group_item, null);
+            view = infalInflater.inflate(R.layout.group_name_list_item, null);
         }
 
-        TextView groupItemTxt = (TextView)view.findViewById(R.id.living_being_group_name);
+        TextView groupItemTxt = (TextView)view.findViewById(R.id.txt_group_name);
         groupItemTxt.setText((String)getGroup(groupIndex));
 
         ExpandableListView expandableListView = (ExpandableListView) viewGroup;
-        expandableListView.expandGroup(groupIndex);*/
+        expandableListView.expandGroup(groupIndex);
 
         return view;
     }
 
     @Override
     public View getChildView(int groupIndex, int childIndex, boolean b, View view, ViewGroup viewGroup) {
-        /*if (view == null) {
-            LayoutInflater infalInflater = LayoutInflater.from(mContext);
-            view = infalInflater.inflate(R.layout.listview_child_item, null);
+
+        LayoutInflater infalInflater = LayoutInflater.from(mContext);
+        WorkoutDataModel.WorkoutProperty workoutProperty = (WorkoutDataModel.WorkoutProperty) getChild(groupIndex, childIndex);
+        if (workoutProperty.type == WorkoutDataModel.Group.ADD_EXCERCISES) {
+            view = infalInflater.inflate(R.layout.add_excercise_list_item, null);
+            TextView textView = (TextView) view.findViewById(R.id.txt_add_excercise);
+            textView.setText(workoutProperty.name);
+        } else if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES) {
+            view = infalInflater.inflate(R.layout.excercise_list_item, null);
+            TextView txtExName = (TextView) view.findViewById(R.id.txt_excercise_name);
+            TextView txtExDur = (TextView) view.findViewById(R.id.txt_excercise_duration);
+            txtExName.setText(workoutProperty.name);
+            txtExDur.setText(workoutProperty.value);
+        } else {
+            view = infalInflater.inflate(R.layout.name_value_list_item, null);
+            TextView txtName = (TextView) view.findViewById(R.id.txt_name);
+            TextView txtValue = (TextView) view.findViewById(R.id.etxt_value);
+            txtName.setText(workoutProperty.name);
+            txtValue.setText(workoutProperty.value);
         }
 
-        TextView childItemTxt = (TextView)view.findViewById(R.id.living_being_name);
-        childItemTxt.setText((String)getChild(groupIndex, childIndex));*/
         return view;
     }
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
-        return false;
+        return true;
     }
 }
