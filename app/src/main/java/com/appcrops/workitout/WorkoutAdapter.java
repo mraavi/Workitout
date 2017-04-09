@@ -83,6 +83,7 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
             view = infalInflater.inflate(R.layout.add_excercise_list_item, null);
             TextView textView = (TextView) view.findViewById(R.id.txt_add_excercise);
             textView.setText(workoutProperty.name);
+            view.setTag(workoutProperty);
         } else if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES) {
             view = infalInflater.inflate(R.layout.excercise_list_item, null);
             TextView txtExName = (TextView) view.findViewById(R.id.txt_excercise_name);
