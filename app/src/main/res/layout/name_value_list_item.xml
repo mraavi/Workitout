@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height">
+    android:layout_height="@dimen/list_item_height"
+    android:orientation="horizontal">
 
     <TextView
+        style="@style/ListItemText"
         android:id="@+id/txt_name"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/list_item_height"
-        android:layout_alignParentLeft="true"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
 
     <EditText
         android:id="@+id/etxt_value"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/list_item_height"
-        android:layout_alignParentRight="true"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

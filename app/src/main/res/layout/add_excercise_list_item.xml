@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="@dimen/list_item_height"
+    android:orientation="horizontal">
     <TextView
+        style="@style/ListItemText"
         android:id="@+id/txt_add_excercise"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/list_item_height" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
 
-</LinearLayout>
+</RelativeLayout>

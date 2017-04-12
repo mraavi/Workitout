@@ -80,18 +80,18 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
         LayoutInflater infalInflater = LayoutInflater.from(mContext);
         WorkoutDataModel.WorkoutProperty workoutProperty = (WorkoutDataModel.WorkoutProperty) getChild(groupIndex, childIndex);
         if (workoutProperty.type == WorkoutDataModel.Group.ADD_EXCERCISES) {
-            view = infalInflater.inflate(R.layout.add_excercise_list_item, null);
+            view = infalInflater.inflate(R.layout.add_excercise_list_item, viewGroup, false);
             TextView textView = (TextView) view.findViewById(R.id.txt_add_excercise);
             textView.setText(workoutProperty.name);
             view.setTag(workoutProperty);
         } else if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES) {
-            view = infalInflater.inflate(R.layout.excercise_list_item, null);
+            view = infalInflater.inflate(R.layout.excercise_list_item, viewGroup, false);
             TextView txtExName = (TextView) view.findViewById(R.id.txt_excercise_name);
             TextView txtExDur = (TextView) view.findViewById(R.id.txt_excercise_duration);
             txtExName.setText(workoutProperty.name);
             txtExDur.setText(workoutProperty.value);
         } else {
-            view = infalInflater.inflate(R.layout.name_value_list_item, null);
+            view = infalInflater.inflate(R.layout.name_value_list_item, viewGroup, false);
             TextView txtName = (TextView) view.findViewById(R.id.txt_name);
             TextView txtValue = (TextView) view.findViewById(R.id.etxt_value);
             txtName.setText(workoutProperty.name);
