@@ -1,10 +1,12 @@
 package com.appcrops.workitout;
 
+import java.io.Serializable;
+
 /**
  * Created by mraavi on 08/04/17.
  */
 
-public class Excercise {
+public class Excercise implements Serializable{
 
     public String getName() {
         return name;

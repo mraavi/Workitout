@@ -60,6 +60,15 @@ public class WorkoutDataModel {
         Group.EXCERCISES.numOfchildren = getNumOfExcercises();
     }
 
+    public Excercise getExcercise(int index) {
+        return mWorkout.getExcercises().get(index);
+    }
+
+    public void modifyExcercise(int index, Excercise excercise) {
+        mWorkout.getExcercises().get(index).setName(excercise.getName());
+        mWorkout.getExcercises().get(index).setDuration(excercise.getDuration());
+    }
+
     public int getNumOfExcercises() {
         return mWorkout.getExcercises().size();
     }
