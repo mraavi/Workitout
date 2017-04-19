@@ -14,6 +14,13 @@
         android:id="@+id/exlst_workout_table"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:groupIndicator="@null">
+        android:groupIndicator="@null"
+        android:layout_above="@+id/btn_save_workout">
     </ExpandableListView>
+    <Button
+        android:id="@+id/btn_save_workout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Save"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

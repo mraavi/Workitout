@@ -1,6 +1,16 @@
 package com.appcrops.workitout;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by mraavi on 08/04/17.
@@ -30,15 +40,30 @@ public class WorkoutDataModel {
         public Group type;
     }
 
-    private Workout mWorkout;
     private Context mContext;
+    private Workout mWorkout;
+    private ArrayList<String> mSavedWorkoutNames;
+    private ArrayList<Workout> mSavedWorkouts;
 
     public WorkoutDataModel(Context context) {
         mContext = context;
+        mSavedWorkoutNames = new ArrayList<String>();
+        mSavedWorkouts = new ArrayList<Workout>();
+        loadSavedWorkouts();
+
+        if (mSavedWorkouts.size() > 0) {
+            mWorkout = mSavedWorkouts.get(0);
+            Group.EXCERCISES.numOfchildren = getNumOfExcercises();
+        } else {
+            createNewExcercise();
+        }
+        //Group.EXCERCISES.numOfchildren = getNumOfExcercises();
+    }
+
+    public void createNewExcercise() {
         mWorkout = new Workout();
         addExcercise();
 
-        Group.EXCERCISES.numOfchildren = getNumOfExcercises();
     }
 
     public void addExcercise() {
@@ -127,5 +152,69 @@ public class WorkoutDataModel {
         }
         child.type = Group.values()[groupIndex];
         return child;
+    }
+
+    public void saveWorkout() {
+        try {
+            FileOutputStream outStream = null;
+            String workoutName = mWorkout.getName();
+            File file = new File(mContext.getFilesDir(), File.pathSeparator + workoutName);
+            outStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
+            objectOutStream.writeObject(mWorkout);
+            objectOutStream.close();
+            saveWorkoutName(workoutName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveWorkoutName(String workoutName) {
+        SharedPreferences prefs = mContext.getSharedPreferences(mContext.getPackageName() + "workout", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        mSavedWorkoutNames.add(workoutName);
+        Set<String> workoutSet = new HashSet<String>();
+        workoutSet.addAll(mSavedWorkoutNames);
+        editor.putStringSet("names", workoutSet);
+        editor.commit();
+    }
+
+    public void loadSavedWorkouts () {
+        SharedPreferences prefs = mContext.getSharedPreferences(mContext.getPackageName() + "workout", Context.MODE_PRIVATE);
+        Set<String> workoutSet = prefs.getStringSet("names", null);
+        if (workoutSet != null) {
+            mSavedWorkoutNames.clear();
+            mSavedWorkoutNames.addAll(workoutSet);
+
+            mSavedWorkouts.clear();
+            for (String workoutName : mSavedWorkoutNames) {
+                Workout workout = getWorkout(workoutName);
+                mSavedWorkouts.add(workout);
+            }
+        }
+    }
+
+    private Workout getWorkout(String workoutName) {
+        Workout workout = null;
+        try {
+            FileInputStream inStream = null;
+            File file = new File(mContext.getFilesDir(), File.pathSeparator + workoutName);
+            inStream = new FileInputStream(file);
+            ObjectInputStream objectInStream = new ObjectInputStream(inStream);
+            workout = (Workout) objectInStream.readObject();
+            objectInStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return workout;
+    }
+
+    public void deleteWorkout(String workoutName) {
+        try {
+            File file = new File(mContext.getFilesDir(), File.pathSeparator + workoutName);
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,12 +1,13 @@
 package com.appcrops.workitout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by mraavi on 08/04/17.
  */
 
-public class Workout {
+public class Workout implements Serializable {
     public String getName() {
         return name;
     }
