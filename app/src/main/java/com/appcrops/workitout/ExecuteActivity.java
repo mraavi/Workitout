@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -22,13 +23,23 @@ public class ExecuteActivity extends AppCompatActivity {
         }
     }
 
+    TextView mTxtExecerciseName;
+    TextView mTxtTimerCountdown;
     ArrayBlockingQueue<TimerData> mWorkoutTimerQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_execute);
+        mTxtTimerCountdown = (TextView) findViewById(R.id.txt_exe_timer_countdown);
+        mTxtExecerciseName = (TextView) findViewById(R.id.txt_current_excercise);
+
         Workout workout = (Workout) getIntent().getSerializableExtra("WorkoutObject");
+        initWorkoutQueue(workout);
+        runTasksFromQueue();
+    }
+
+    public void initWorkoutQueue(Workout workout) {
         ArrayList<TimerData> timerList = new ArrayList<TimerData>();
 
         ArrayList<Excercise> excercises = workout.getExcercises();
@@ -66,7 +77,6 @@ public class ExecuteActivity extends AppCompatActivity {
         }
 
         mWorkoutTimerQueue = new ArrayBlockingQueue<TimerData>(timerList.size(), false, timerList);
-        runTasksFromQueue();
     }
 
     private void runTasksFromQueue() {
@@ -80,9 +90,12 @@ public class ExecuteActivity extends AppCompatActivity {
     }
 
     private void runTimerTask(final TimerData timerData) {
+        mTxtExecerciseName.setText(timerData.name);
+        mTxtTimerCountdown.setText(String.valueOf(timerData.duration));
         new CountDownTimer(timerData.duration*1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
+                mTxtTimerCountdown.setText(String.valueOf(millisUntilFinished / 1000));
                 Log.d(TAG, "runTimerTask-Remaining Time for " + timerData.name + " " + millisUntilFinished / 1000);
             }
 
