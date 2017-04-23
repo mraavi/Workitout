@@ -34,10 +34,18 @@ public class WorkoutDataModel {
         }
     }
 
+    public static final int TAG_NUM_OF_SETS = 1;
+    public static final int TAG_EXCERCISES = 2;
+    public static final int TAG_REST_BET_EXCERCISES = 3;
+    public static final int TAG_REST_BET_SETS = 4;
+    public static final int TAG_WARMUP = 5;
+    public static final int TAG_COOLDOWN = 6;
+
     public class WorkoutProperty{
         public String name;
         public String value;
         public Group type;
+        public int tag;
     }
 
     private Context mContext;
@@ -64,6 +72,10 @@ public class WorkoutDataModel {
         mWorkout = new Workout();
         addExcercise();
 
+    }
+
+    public Workout getCurrentWorkout() {
+        return mWorkout;
     }
 
     public void addExcercise() {
@@ -98,6 +110,26 @@ public class WorkoutDataModel {
         return mWorkout.getExcercises().size();
     }
 
+    public void setNumOfSets(int num) {
+        mWorkout.setNumOfSets(num);
+    }
+
+    public void setRestDurationBetweenExercises(int duration) {
+        mWorkout.setRestDurationBetweenExercises(duration);
+    }
+
+    public void setRestDurationBetweenSets(int duration) {
+        mWorkout.setRestDurationBetweenSets(duration);
+    }
+
+    public void setWarmUpDuration(int duration) {
+        mWorkout.setWarmUpDuration(duration);
+    }
+
+    public void setCoolDownDuration(int duration) {
+        mWorkout.setCoolDownDuration(duration);
+    }
+
     public int getNumOfGroups() {
         return Group.COUNT;
     }
@@ -122,11 +154,13 @@ public class WorkoutDataModel {
             case NUM_OF_SETS:
                 child.name = mContext.getString(R.string.num_of_sets);
                 child.value = String.valueOf(mWorkout.getNumOfSets());
+                child.tag = TAG_NUM_OF_SETS;
                 break;
             case EXCERCISES:
                 Excercise excercise = mWorkout.getExcercises().get(chaildIndex);
                 child.name = excercise.getName();
                 child.value = String.valueOf(excercise.getDuration());
+                child.tag = TAG_EXCERCISES;
                 break;
             case ADD_EXCERCISES:
                 child.name = mContext.getString(R.string.add_excercise);
@@ -135,18 +169,22 @@ public class WorkoutDataModel {
                 if (chaildIndex == 0) {
                     child.name = mContext.getString(R.string.rest_bet_sets);
                     child.value = String.valueOf(mWorkout.getRestDurationBetweenSets());
+                    child.tag = TAG_REST_BET_SETS;
                 } else {
                     child.name = mContext.getString(R.string.rest_bet_exercise);
                     child.value = String.valueOf(mWorkout.getRestDurationBetweenExercises());
+                    child.tag = TAG_REST_BET_EXCERCISES;
                 }
                 break;
             case WARPUP:
                 if (chaildIndex == 0) {
                     child.name = mContext.getString(R.string.warmup);
                     child.value = String.valueOf(mWorkout.getWarmUpDuration());
+                    child.tag = TAG_WARMUP;
                 } else {
                     child.name = mContext.getString(R.string.cooldown);
                     child.value = String.valueOf(mWorkout.getCoolDownDuration());
+                    child.tag = TAG_COOLDOWN;
                 }
                 break;
         }

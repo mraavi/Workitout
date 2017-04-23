@@ -50,6 +50,17 @@ public class MainActivity extends AppCompatActivity {
                 mWorkoutDataModel.saveWorkout();
             }
         });
+
+        Button startBtn = (Button) findViewById(R.id.btn_start_workout);
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mWorkoutDataModel.saveWorkout();
+                Intent intent = new Intent(MainActivity.this, ExecuteActivity.class);
+                intent.putExtra("WorkoutObject", mWorkoutDataModel.getCurrentWorkout());
+                startActivity(intent);
+            }
+        });
     }
 
 

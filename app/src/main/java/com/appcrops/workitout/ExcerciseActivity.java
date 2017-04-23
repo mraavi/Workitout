@@ -18,6 +18,8 @@ public class ExcerciseActivity extends AppCompatActivity {
 
         final EditText nameEditText = (EditText) findViewById(R.id.etxt_excercise_name);
         final EditText durationEditText = (EditText) findViewById(R.id.etxt_duration);
+        nameEditText.setText(excercise.getName());
+        durationEditText.setText(String.valueOf(excercise.getDuration()));
 
         Button btnOk = (Button) findViewById(R.id.btn_ok);
         Button btnCancle = (Button) findViewById(R.id.btn_cancle);

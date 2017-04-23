@@ -6,6 +6,6 @@ package com.appcrops.workitout;
 
 public class Constants {
     public final static int ACTION_EDIT_EXERCISE = 1000;
-    public final static int ACTION_EDIT_EXERCISE_YES = 0;
-    public final static int ACTION_EDIT_EXERCISE_NO = 1;
+    public final static int ACTION_EDIT_EXERCISE_YES = 1001;
+    public final static int ACTION_EDIT_EXERCISE_NO = 1002;
 }

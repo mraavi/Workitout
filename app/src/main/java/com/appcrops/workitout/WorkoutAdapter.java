@@ -1,10 +1,16 @@
 package com.appcrops.workitout;
 
 import android.content.Context;
+import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -89,12 +95,19 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
             TextView txtExDur = (TextView) view.findViewById(R.id.txt_excercise_duration);
             txtExName.setText(workoutProperty.name);
             txtExDur.setText(workoutProperty.value);
+
+            Button deleteBtn = (Button) view.findViewById(R.id.btn_delete_exe);
+            deleteBtn.setTag(childIndex);
+            setupExcerciseItemListeners(deleteBtn, null);
         } else {
             view = infalInflater.inflate(R.layout.name_value_list_item, viewGroup, false);
             TextView txtName = (TextView) view.findViewById(R.id.txt_name);
-            TextView txtValue = (TextView) view.findViewById(R.id.etxt_value);
+            EditText etxtValue = (EditText) view.findViewById(R.id.etxt_value);
             txtName.setText(workoutProperty.name);
-            txtValue.setText(workoutProperty.value);
+            etxtValue.setText(workoutProperty.value);
+            etxtValue.setTag(workoutProperty.tag);
+            setupValueModifyListeners(etxtValue);
+            etxtValue.setInputType(InputType.TYPE_CLASS_TEXT);
         }
         view.setTag(workoutProperty);
         return view;
@@ -103,5 +116,81 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;
+    }
+
+    private void setupExcerciseItemListeners(Button deleteBtn, Button addBtn) {
+        if (deleteBtn != null) {
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Integer index = (Integer)view.getTag();
+                    mWorkoutDataModel.removeExcercise(index);
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+        if (addBtn != null) {
+            addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
+    }
+
+    private void setupValueModifyListeners(final EditText editText) {
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                if ( actionId == EditorInfo.IME_ACTION_DONE ) {
+                    try {
+                        int tag = (int) editText.getTag();
+                        String inputValueTxt = (((EditText) textView).getText()).toString();
+                        if (inputValueTxt.isEmpty()) {
+                            if (tag == WorkoutDataModel.TAG_NUM_OF_SETS) {
+                                inputValueTxt = "1";
+                            } else {
+                                inputValueTxt = "0";
+                            }
+                            editText.setText(inputValueTxt);
+                        }
+
+                        int inputValue = Integer.parseInt(inputValueTxt);
+
+                        switch (tag) {
+                            case WorkoutDataModel.TAG_NUM_OF_SETS:
+                                mWorkoutDataModel.setNumOfSets(inputValue);
+                                break;
+                            case WorkoutDataModel.TAG_REST_BET_SETS:
+                                mWorkoutDataModel.setRestDurationBetweenSets(inputValue);
+                                break;
+                            case WorkoutDataModel.TAG_REST_BET_EXCERCISES:
+                                mWorkoutDataModel.setRestDurationBetweenExercises(inputValue);
+                                break;
+                            case WorkoutDataModel.TAG_WARMUP:
+                                mWorkoutDataModel.setWarmUpDuration(inputValue);
+                                break;
+                            case WorkoutDataModel.TAG_COOLDOWN:
+                                mWorkoutDataModel.setCoolDownDuration(inputValue);
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    textView.clearFocus();
+
+                   InputMethodManager inputManager = (InputMethodManager)
+                            mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.toggleSoftInput(0, 0);
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

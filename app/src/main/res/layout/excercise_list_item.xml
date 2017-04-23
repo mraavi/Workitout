@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height">
+    android:layout_height="@dimen/list_item_height"
+    android:descendantFocusability="blocksDescendants">
 
+    <Button
+        android:id="@+id/btn_delete_exe"
+        android:layout_width="25dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="4dp"
+        android:text="D"
+        android:background="@color/colorAccent"/>
     <TextView
         style="@style/ListItemText"
         android:id="@+id/txt_excercise_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@+id/btn_delete_exe"
         android:layout_centerVertical="true" />
 
     <TextView
