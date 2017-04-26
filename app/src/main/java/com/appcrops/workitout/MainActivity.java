@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mWorkoutDataModel.saveWorkout();
-                Intent intent = new Intent(MainActivity.this, ExecuteActivity.class);
+                Intent intent = new Intent(MainActivity.this, PerformWorkoutActivity.class);
                 intent.putExtra("WorkoutObject", mWorkoutDataModel.getCurrentWorkout());
                 startActivity(intent);
             }

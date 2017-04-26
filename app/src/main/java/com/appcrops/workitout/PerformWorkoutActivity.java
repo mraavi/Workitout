@@ -1,19 +1,25 @@
 package com.appcrops.workitout;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class ExecuteActivity extends AppCompatActivity {
+public class PerformWorkoutActivity extends AppCompatActivity {
 
     private final String TAG = getClass().getName();
 
-    public class TimerData {
+    public class TimerData extends Object{
         public String name;
         public int duration;
 
@@ -26,6 +32,8 @@ public class ExecuteActivity extends AppCompatActivity {
     TextView mTxtExecerciseName;
     TextView mTxtTimerCountdown;
     ArrayBlockingQueue<TimerData> mWorkoutTimerQueue;
+    ExcercisesQueueAdapter mExcercisesQueueAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,10 @@ public class ExecuteActivity extends AppCompatActivity {
 
         Workout workout = (Workout) getIntent().getSerializableExtra("WorkoutObject");
         initWorkoutQueue(workout);
+
+        ListView excerciseQueueList = (ListView) findViewById(R.id.listview_excercises);
+        mExcercisesQueueAdapter = new ExcercisesQueueAdapter(this, mWorkoutTimerQueue);
+        excerciseQueueList.setAdapter(mExcercisesQueueAdapter);
         runTasksFromQueue();
     }
 
@@ -82,6 +94,8 @@ public class ExecuteActivity extends AppCompatActivity {
     private void runTasksFromQueue() {
         TimerData timerData = mWorkoutTimerQueue.poll();
         if ( timerData != null) {
+            mExcercisesQueueAdapter.setExcerciseQueue(mWorkoutTimerQueue);
+            mExcercisesQueueAdapter.notifyDataSetChanged();
             runTimerTask(timerData);
         } else {
             Log.d(TAG, "runTasksFromQueue: " + "WORKOUT DONE!!");
@@ -104,5 +118,49 @@ public class ExecuteActivity extends AppCompatActivity {
                 runTasksFromQueue();
             }
         }.start();
+    }
+
+    public class ExcercisesQueueAdapter extends BaseAdapter {
+        private Context mContext;
+        private ArrayList<TimerData> mTimerDataList;
+        public ExcercisesQueueAdapter(Context context, ArrayBlockingQueue<TimerData> timerDataQueue) {
+            mContext = context;
+            mTimerDataList = new ArrayList<>(timerDataQueue);
+        }
+
+        public void setExcerciseQueue(ArrayBlockingQueue<TimerData> timerDataQueue) {
+            //mTimerDataList = (ArrayList<TimerData>) Arrays.asList((TimerData[])timerDataQueue.toArray());
+            mTimerDataList = new ArrayList<>(timerDataQueue);
+        }
+
+        @Override
+        public int getCount() {
+            if (mTimerDataList != null) {
+                return mTimerDataList.size();
+            }
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mTimerDataList.get(position);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int index, View view, ViewGroup viewGroup) {
+            LayoutInflater infalInflater = LayoutInflater.from(mContext);
+            view = infalInflater.inflate(R.layout.workout_queue_list_item, viewGroup, false);
+            TextView txtExName = (TextView) view.findViewById(R.id.txt_excercise_name);
+            TextView txtExDur = (TextView) view.findViewById(R.id.txt_excercise_duration);
+            TimerData timerData = mTimerDataList.get(index);
+            txtExName.setText(timerData.name);
+            txtExDur.setText(String.valueOf(timerData.duration));
+            return view;
+        }
     }
 }
