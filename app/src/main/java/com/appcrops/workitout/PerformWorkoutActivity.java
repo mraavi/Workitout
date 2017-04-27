@@ -39,6 +39,7 @@ public class PerformWorkoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_execute);
+        TextToVoice.init(getApplicationContext());
         mTxtTimerCountdown = (TextView) findViewById(R.id.txt_exe_timer_countdown);
         mTxtExecerciseName = (TextView) findViewById(R.id.txt_current_excercise);
 
@@ -106,6 +107,7 @@ public class PerformWorkoutActivity extends AppCompatActivity {
     private void runTimerTask(final TimerData timerData) {
         mTxtExecerciseName.setText(timerData.name);
         mTxtTimerCountdown.setText(String.valueOf(timerData.duration));
+        TextToVoice.speak(timerData.name);
         new CountDownTimer(timerData.duration*1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
