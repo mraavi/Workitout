@@ -34,6 +34,7 @@ public class WorkoutDataModel {
         }
     }
 
+    public static final int TAG_WORKOUT_NAME = 0;
     public static final int TAG_NUM_OF_SETS = 1;
     public static final int TAG_EXCERCISES = 2;
     public static final int TAG_REST_BET_EXCERCISES = 3;
@@ -53,7 +54,44 @@ public class WorkoutDataModel {
     private ArrayList<String> mSavedWorkoutNames;
     private ArrayList<Workout> mSavedWorkouts;
 
-    public WorkoutDataModel(Context context) {
+    private static WorkoutDataModel sWorkoutDataModel = null;
+    private WorkoutDataModel() {
+
+    }
+    public static WorkoutDataModel instance() {
+        if(sWorkoutDataModel == null) {
+            sWorkoutDataModel = new WorkoutDataModel();
+        }
+        return sWorkoutDataModel;
+    }
+
+    public WorkoutDataModel init(Context context) {
+        mContext = context;
+        mSavedWorkoutNames = new ArrayList<String>();
+        mSavedWorkouts = new ArrayList<Workout>();
+        loadSavedWorkouts();
+
+        /*if (mSavedWorkouts.size() > 0) {
+            mWorkout = mSavedWorkouts.get(0);
+            Group.EXCERCISES.numOfchildren = getNumOfExcercises();
+        } else {
+            createNewExcercise();
+        }*/
+        return this;
+    }
+
+    public void setWorkout(Workout workout) {
+        if(workout != null) {
+            mWorkout = workout;
+            Group.EXCERCISES.numOfchildren = getNumOfExcercises();
+        }
+    }
+
+    public void createNewWorkout() {
+        createNewExcercise();
+    }
+
+   /* public WorkoutDataModel(Context context) {
         mContext = context;
         mSavedWorkoutNames = new ArrayList<String>();
         mSavedWorkouts = new ArrayList<Workout>();
@@ -65,8 +103,7 @@ public class WorkoutDataModel {
         } else {
             createNewExcercise();
         }
-        //Group.EXCERCISES.numOfchildren = getNumOfExcercises();
-    }
+    }*/
 
     public void createNewExcercise() {
         mWorkout = new Workout();
@@ -110,6 +147,10 @@ public class WorkoutDataModel {
         return mWorkout.getExcercises().size();
     }
 
+    public void setWorkoutName(String name) {
+        mWorkout.setName(name);
+    }
+
     public void setNumOfSets(int num) {
         mWorkout.setNumOfSets(num);
     }
@@ -150,6 +191,7 @@ public class WorkoutDataModel {
             case WORKOUT_NAME:
                 child.name = mContext.getString(R.string.workout_name);
                 child.value = mWorkout.getName();
+                child.tag = TAG_WORKOUT_NAME;
                 break;
             case NUM_OF_SETS:
                 child.name = mContext.getString(R.string.num_of_sets);
@@ -245,6 +287,10 @@ public class WorkoutDataModel {
             e.printStackTrace();
         }
         return workout;
+    }
+
+    public ArrayList<Workout> getSavedWorkouts() {
+        return mSavedWorkouts;
     }
 
     public void deleteWorkout(String workoutName) {

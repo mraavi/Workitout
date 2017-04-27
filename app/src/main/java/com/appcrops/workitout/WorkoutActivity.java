@@ -7,16 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
-public class MainActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity {
 
     private WorkoutDataModel mWorkoutDataModel;
     private WorkoutAdapter mWorkoutAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_workout);
 
-        mWorkoutDataModel = new WorkoutDataModel(this);
+        mWorkoutDataModel = WorkoutDataModel.instance();
         mWorkoutAdapter = new WorkoutAdapter(this, mWorkoutDataModel);
 
         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.exlst_workout_table);
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         mWorkoutAdapter.notifyDataSetChanged();
                         return true;
                     } else if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES){
-                        Intent intent = new Intent(MainActivity.this, ExcerciseActivity.class);
+                        Intent intent = new Intent(WorkoutActivity.this, EditExcerciseActivity.class);
                         Excercise excercise = mWorkoutDataModel.getExcercise(chaildIndex);
                         intent.putExtra("ExcerciseObject", excercise);
                         intent.putExtra("ExcerciseIndex", chaildIndex);
@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mWorkoutDataModel.saveWorkout();
+                Intent intent = new Intent(WorkoutActivity.this, HomeScreenActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mWorkoutDataModel.saveWorkout();
-                Intent intent = new Intent(MainActivity.this, PerformWorkoutActivity.class);
+                Intent intent = new Intent(WorkoutActivity.this, PerformWorkoutActivity.class);
                 intent.putExtra("WorkoutObject", mWorkoutDataModel.getCurrentWorkout());
                 startActivity(intent);
             }

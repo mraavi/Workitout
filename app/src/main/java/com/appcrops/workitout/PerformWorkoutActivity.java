@@ -38,7 +38,7 @@ public class PerformWorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_execute);
+        setContentView(R.layout.activity_perform_workout);
         TextToVoice.init(getApplicationContext());
         mTxtTimerCountdown = (TextView) findViewById(R.id.txt_exe_timer_countdown);
         mTxtExecerciseName = (TextView) findViewById(R.id.txt_current_excercise);
@@ -156,7 +156,7 @@ public class PerformWorkoutActivity extends AppCompatActivity {
         @Override
         public View getView(int index, View view, ViewGroup viewGroup) {
             LayoutInflater infalInflater = LayoutInflater.from(mContext);
-            view = infalInflater.inflate(R.layout.workout_queue_list_item, viewGroup, false);
+            view = infalInflater.inflate(R.layout.perform_workout_queue_list_item, viewGroup, false);
             TextView txtExName = (TextView) view.findViewById(R.id.txt_excercise_name);
             TextView txtExDur = (TextView) view.findViewById(R.id.txt_excercise_duration);
             TimerData timerData = mTimerDataList.get(index);

@@ -106,8 +106,8 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
             txtName.setText(workoutProperty.name);
             etxtValue.setText(workoutProperty.value);
             etxtValue.setTag(workoutProperty.tag);
-            setupValueModifyListeners(etxtValue);
             etxtValue.setInputType(InputType.TYPE_CLASS_TEXT);
+            setupValueModifyListeners(etxtValue);
         }
         view.setTag(workoutProperty);
         return view;
@@ -157,9 +157,15 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
                             editText.setText(inputValueTxt);
                         }
 
-                        int inputValue = Integer.parseInt(inputValueTxt);
+                        int inputValue = 0;
+                        if(tag != WorkoutDataModel.TAG_WORKOUT_NAME) {
+                            inputValue = Integer.parseInt(inputValueTxt);
+                        }
 
                         switch (tag) {
+                            case WorkoutDataModel.TAG_WORKOUT_NAME:
+                                mWorkoutDataModel.setWorkoutName(inputValueTxt);
+                                break;
                             case WorkoutDataModel.TAG_NUM_OF_SETS:
                                 mWorkoutDataModel.setNumOfSets(inputValue);
                                 break;
