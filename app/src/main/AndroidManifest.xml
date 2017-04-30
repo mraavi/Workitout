@@ -12,7 +12,7 @@
             android:name=".WorkoutActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".EditExcerciseActivity" />
+        <activity android:name=".AddExcerciseActivity" />
         <activity android:name=".PerformWorkoutActivity" />
         <activity android:name=".HomeScreenActivity">
             <intent-filter>

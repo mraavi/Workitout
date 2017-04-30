@@ -32,7 +32,7 @@ public class WorkoutActivity extends AppCompatActivity {
                         mWorkoutAdapter.notifyDataSetChanged();
                         return true;
                     } else if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES){
-                        Intent intent = new Intent(WorkoutActivity.this, EditExcerciseActivity.class);
+                        Intent intent = new Intent(WorkoutActivity.this, AddExcerciseActivity.class);
                         Excercise excercise = mWorkoutDataModel.getExcercise(chaildIndex);
                         intent.putExtra("ExcerciseObject", excercise);
                         intent.putExtra("ExcerciseIndex", chaildIndex);

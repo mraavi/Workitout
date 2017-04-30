@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.appcrops.workitout.EditExcerciseActivity">
+    tools:context="com.appcrops.workitout.AddExcerciseActivity">
 
     <TextView
         android:id="@+id/txt_excercise_name"
@@ -50,6 +50,16 @@
         android:layout_below="@+id/etxt_excercise_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
+
+    <ListView
+        android:id="@+id/lst_excercises"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_above="@+id/btn_ok"
+        android:layout_below="@+id/etxt_duration">
+
+    </ListView>
 
     <Button
         android:id="@+id/btn_ok"

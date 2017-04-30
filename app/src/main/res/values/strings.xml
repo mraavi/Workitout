@@ -8,5 +8,24 @@
     <string name="cooldown">Cool down</string>
     <string name="add_excercise">Add excercise</string>
     <string name="default_excercise_name">Excercise</string>
-    <string name="default_workout_name">Default workout name</string>
+    <string name="workout_name_exist">Workout name already exist. Please choose a different name for workout</string>
+    <string name="default_workout_name">Challenge</string>
+
+    <string-array name="excercise_names">
+        <item>High Knees</item>
+        <item>Plank Jacks</item>
+        <item>Butt Kick</item>
+        <item>Jumping Jack</item>
+        <item>Vertical Jump</item>
+        <item>Skaters</item>
+        <item>Tuck Jump</item>
+        <item>Mountain Climbe</item>
+        <item>Hop to Push-Up</item>
+        <item>Step Up</item>
+        <item>Burpee</item>
+        <item>Flutter Kick</item>
+        <item>Squat Jump</item>
+        <item>Lateral Jump</item>
+        <item>Jumping Lunges</item>
+    </string-array>
 </resources>
