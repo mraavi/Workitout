@@ -21,6 +21,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        TextToVoice.init(getApplicationContext());
         mWorkoutDataModel = WorkoutDataModel.instance().init(getApplicationContext());
 
         TextView txtNewWorkout = (TextView) findViewById(R.id.txt_new_workout);

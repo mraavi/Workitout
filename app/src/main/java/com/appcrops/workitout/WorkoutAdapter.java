@@ -106,7 +106,9 @@ public class WorkoutAdapter extends BaseExpandableListAdapter {
             txtName.setText(workoutProperty.name);
             etxtValue.setText(workoutProperty.value);
             etxtValue.setTag(workoutProperty.tag);
-            etxtValue.setInputType(InputType.TYPE_CLASS_TEXT);
+            if(workoutProperty.tag == WorkoutDataModel.TAG_WORKOUT_NAME) {
+                etxtValue.setInputType(InputType.TYPE_CLASS_TEXT);
+            }
             setupValueModifyListeners(etxtValue);
         }
         view.setTag(workoutProperty);

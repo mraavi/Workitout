@@ -33,13 +33,13 @@ public class PerformWorkoutActivity extends AppCompatActivity {
     TextView mTxtTimerCountdown;
     ArrayBlockingQueue<TimerData> mWorkoutTimerQueue;
     ExcercisesQueueAdapter mExcercisesQueueAdapter;
+    CountDownTimer mExcerciseTimer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perform_workout);
-        TextToVoice.init(getApplicationContext());
         mTxtTimerCountdown = (TextView) findViewById(R.id.txt_exe_timer_countdown);
         mTxtExecerciseName = (TextView) findViewById(R.id.txt_current_excercise);
 
@@ -49,10 +49,25 @@ public class PerformWorkoutActivity extends AppCompatActivity {
         ListView excerciseQueueList = (ListView) findViewById(R.id.listview_excercises);
         mExcercisesQueueAdapter = new ExcercisesQueueAdapter(this, mWorkoutTimerQueue);
         excerciseQueueList.setAdapter(mExcercisesQueueAdapter);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         runTasksFromQueue();
     }
 
-    public void initWorkoutQueue(Workout workout) {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mExcerciseTimer != null) {
+            mExcerciseTimer.cancel();
+        }
+    }
+
+
+    private void initWorkoutQueue(Workout workout) {
         ArrayList<TimerData> timerList = new ArrayList<TimerData>();
 
         ArrayList<Excercise> excercises = workout.getExcercises();
@@ -108,7 +123,7 @@ public class PerformWorkoutActivity extends AppCompatActivity {
         mTxtExecerciseName.setText(timerData.name);
         mTxtTimerCountdown.setText(String.valueOf(timerData.duration));
         TextToVoice.speak(timerData.name);
-        new CountDownTimer(timerData.duration*1000, 1000) {
+        mExcerciseTimer = new CountDownTimer(timerData.duration*1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 mTxtTimerCountdown.setText(String.valueOf(millisUntilFinished / 1000));
@@ -122,7 +137,7 @@ public class PerformWorkoutActivity extends AppCompatActivity {
         }.start();
     }
 
-    public class ExcercisesQueueAdapter extends BaseAdapter {
+    private class ExcercisesQueueAdapter extends BaseAdapter {
         private Context mContext;
         private ArrayList<TimerData> mTimerDataList;
         public ExcercisesQueueAdapter(Context context, ArrayBlockingQueue<TimerData> timerDataQueue) {

@@ -64,6 +64,14 @@ public class Workout implements Serializable {
         this.coolDownDuration = coolDownDuration;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
     public  Workout() {
         name = "Challenge";
         excercises = new ArrayList<Excercise>();
@@ -72,6 +80,7 @@ public class Workout implements Serializable {
         restDurationBetweenSets = 45;
         warmUpDuration = 0;
         coolDownDuration = 0;
+        id = 0;
     }
 
     private String name;
@@ -81,4 +90,5 @@ public class Workout implements Serializable {
     private int restDurationBetweenExercises;
     private int warmUpDuration;
     private int coolDownDuration;
+    private int id;
 }

@@ -2,6 +2,7 @@ package com.appcrops.workitout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -47,10 +48,14 @@ public class WorkoutActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWorkoutDataModel.saveWorkout();
-                Intent intent = new Intent(WorkoutActivity.this, HomeScreenActivity.class);
-                startActivity(intent);
-                finish();
+                if(!mWorkoutDataModel.isWorkoutNameExist()) {
+                    mWorkoutDataModel.saveWorkout();
+                    Intent intent = new Intent(WorkoutActivity.this, HomeScreenActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    showDialog(getString(R.string.workout_name_exist) );
+                }
             }
         });
 
@@ -82,5 +87,11 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void showDialog(String str) {
+        new AlertDialog.Builder(this)
+                .setMessage(str)
+                .show();
     }
 }

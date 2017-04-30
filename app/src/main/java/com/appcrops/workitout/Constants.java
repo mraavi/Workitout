@@ -8,4 +8,6 @@ public class Constants {
     public final static int ACTION_EDIT_EXERCISE = 1000;
     public final static int ACTION_EDIT_EXERCISE_YES = 1001;
     public final static int ACTION_EDIT_EXERCISE_NO = 1002;
+
+    public final static int START_WORKOUT_ID = 10000;
 }

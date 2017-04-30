@@ -1,6 +1,7 @@
 package com.appcrops.workitout;
 
 import android.content.Context;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
@@ -26,7 +27,18 @@ public class TextToVoice {
         }
     }
 
-    public static void speak(String strToSpeak) {
-        sTextToSpeech.speak(strToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+    public static void speak(final String strToSpeak) {
+        new Thread() {
+            @Override
+            public void run(){
+                sTextToSpeech.speak(strToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    sTextToSpeech.speak(strToSpeak,TextToSpeech.QUEUE_FLUSH,null,null);
+                } else {
+                    sTextToSpeech.speak(strToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            }
+
+        }.start();
     }
 }

@@ -88,7 +88,21 @@ public class WorkoutDataModel {
     }
 
     public void createNewWorkout() {
-        createNewExcercise();
+        mWorkout = new Workout();
+        mWorkout.setId(getNewWorkoutId());
+        addExcercise();
+    }
+
+    public int getNewWorkoutId(){
+        return mSavedWorkouts.size() + Constants.START_WORKOUT_ID;
+    }
+
+    public String getNewWorkoutName(){
+        String workoutName = mContext.getString(R.string.default_workout_name);
+        if(mSavedWorkouts.size() > 0) {
+            workoutName = workoutName +" " + mSavedWorkouts.size();
+        }
+        return workoutName;
     }
 
    /* public WorkoutDataModel(Context context) {
@@ -104,12 +118,6 @@ public class WorkoutDataModel {
             createNewExcercise();
         }
     }*/
-
-    public void createNewExcercise() {
-        mWorkout = new Workout();
-        addExcercise();
-
-    }
 
     public Workout getCurrentWorkout() {
         return mWorkout;
@@ -257,6 +265,19 @@ public class WorkoutDataModel {
         workoutSet.addAll(mSavedWorkoutNames);
         editor.putStringSet("names", workoutSet);
         editor.commit();
+    }
+
+    public boolean isWorkoutNameExist(){
+        boolean result = false;
+        String workoutName = mWorkout.getName();
+        for (Workout savedWorkout: mSavedWorkouts) {
+            String savedWorkoutName = savedWorkout.getName();
+            if(savedWorkout.getId() != mWorkout.getId() && (workoutName.compareToIgnoreCase(savedWorkoutName) == 0)){
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     public void loadSavedWorkouts () {
