@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
+
 public class WorkoutActivity extends AppCompatActivity {
 
     private WorkoutDataModel mWorkoutDataModel;
@@ -27,14 +29,14 @@ public class WorkoutActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupIndex, int chaildIndex, long l) {
                 WorkoutDataModel.WorkoutProperty workoutProperty = (WorkoutDataModel.WorkoutProperty)view.getTag();
                 if (workoutProperty != null) {
-                    if (workoutProperty.type == WorkoutDataModel.Group.ADD_EXCERCISES) {
+                   /* if (workoutProperty.type == WorkoutDataModel.Group.ADD_EXCERCISES) {
                         mWorkoutDataModel.addExcercise();
                         mWorkoutAdapter.notifyDataSetChanged();
                         return true;
-                    } else if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES){
+                    } else */if (workoutProperty.type == WorkoutDataModel.Group.EXCERCISES || workoutProperty.type == WorkoutDataModel.Group.ADD_EXCERCISES){
                         Intent intent = new Intent(WorkoutActivity.this, AddExcerciseActivity.class);
-                        Excercise excercise = mWorkoutDataModel.getExcercise(chaildIndex);
-                        intent.putExtra("ExcerciseObject", excercise);
+                       // Excercise excercise = mWorkoutDataModel.getExcercise(chaildIndex);
+                        //intent.putExtra("ExcerciseObject", excercise);
                         intent.putExtra("ExcerciseIndex", chaildIndex);
                         startActivityForResult(intent, Constants.ACTION_EDIT_EXERCISE);
                         return true;
@@ -71,22 +73,27 @@ public class WorkoutActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == Constants.ACTION_EDIT_EXERCISE) {
             if (resultCode == Constants.ACTION_EDIT_EXERCISE_YES) {
-                Excercise excercise = (Excercise)intent.getSerializableExtra("ExcerciseObject");
+               /* Excercise excercise = (Excercise)intent.getSerializableExtra("ExcerciseObject");
                 int excerciseIndex = intent.getIntExtra("ExcerciseIndex", -1);
                 if ( excercise != null && excerciseIndex != -1) {
                     mWorkoutDataModel.modifyExcercise(excerciseIndex, excercise);
                     mWorkoutAdapter.notifyDataSetChanged();
+                }*/
+                ArrayList<Excercise> excercises = (ArrayList<Excercise>)intent.getSerializableExtra("ExcerciseObjects");
+                int excerciseIndex = intent.getIntExtra("ExcerciseIndex", -1);
+                if ( excercises != null && excerciseIndex != -1) {
+                    //mWorkoutDataModel.modifyExcercise(excerciseIndex, excercise);
+                    mWorkoutDataModel.addExcercisesAtIndex(excercises, excerciseIndex);
+                    mWorkoutAdapter.notifyDataSetChanged();
                 }
             }
         }
-
     }
 
     private void showDialog(String str) {

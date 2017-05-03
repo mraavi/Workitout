@@ -8,9 +8,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusableInTouchMode="true"
     tools:context="com.appcrops.workitout.AddExcerciseActivity">
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/txt_excercise_name"
         android:text="Name"
         android:layout_width="wrap_content"
@@ -30,16 +31,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:imeOptions="actionDone"/>
+        android:imeOptions="actionDone"/>-->
 
     <TextView
         android:id="@+id/txt_duration"
         android:text="Duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etxt_excercise_name"
-        android:layout_alignRight="@+id/txt_excercise_name"
-        android:layout_alignEnd="@+id/txt_excercise_name"/>
+        android:layout_alignParentLeft="true" />
 
     <EditText
         android:id="@+id/etxt_duration"
@@ -47,7 +46,6 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:layout_below="@+id/etxt_excercise_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 
@@ -58,7 +56,6 @@
         android:background="@android:color/darker_gray"
         android:layout_above="@+id/btn_ok"
         android:layout_below="@+id/etxt_duration">
-
     </ListView>
 
     <Button

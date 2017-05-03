@@ -20,7 +20,7 @@ public class WorkoutDataModel {
     public static enum Group{
         WORKOUT_NAME("", 1),
         NUM_OF_SETS("", 1),
-        EXCERCISES("Excercise", 1),
+        EXCERCISES("Excercise", 0),
         ADD_EXCERCISES("", 1),
         REST("", 2),
         WARPUP("", 2);
@@ -90,7 +90,7 @@ public class WorkoutDataModel {
     public void createNewWorkout() {
         mWorkout = new Workout();
         mWorkout.setId(getNewWorkoutId());
-        addExcercise();
+       // addExcercise();
     }
 
     public int getNewWorkoutId(){
@@ -134,6 +134,19 @@ public class WorkoutDataModel {
 
     public void addExcercise(Excercise excercise) {
         mWorkout.getExcercises().add(excercise);
+        Group.EXCERCISES.numOfchildren = getNumOfExcercises();
+    }
+
+    public void addExcercisesAtIndex(ArrayList<Excercise> newExcercises) {
+        addExcercisesAtIndex(newExcercises, 0);
+    }
+
+    public void addExcercisesAtIndex(ArrayList<Excercise> newExcercises, int index) {
+        ArrayList<Excercise> workoutExcercises =  mWorkout.getExcercises();
+        for(Excercise excercise:newExcercises) {
+            workoutExcercises.add(index, excercise);
+            index++;
+        }
         Group.EXCERCISES.numOfchildren = getNumOfExcercises();
     }
 

@@ -10,4 +10,6 @@ public class Constants {
     public final static int ACTION_EDIT_EXERCISE_NO = 1002;
 
     public final static int START_WORKOUT_ID = 10000;
+
+    public final static int DEFAULT_EXCERCISE_DURATON = 30;
 }

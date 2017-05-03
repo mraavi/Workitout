@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AddExcerciseActivity extends AppCompatActivity {
@@ -23,17 +24,18 @@ public class AddExcerciseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_excercise);
-        Excercise excercise = (Excercise) getIntent().getSerializableExtra("ExcerciseObject");
+       // Excercise excercise = (Excercise) getIntent().getSerializableExtra("ExcerciseObject");
         final int excerciseIndex = getIntent().getIntExtra("ExcerciseIndex", -1);
 
-        final EditText nameEditText = (EditText) findViewById(R.id.etxt_excercise_name);
+       // final EditText nameEditText = (EditText) findViewById(R.id.etxt_excercise_name);
+        //nameEditText.setText(excercise.getName());
         final EditText durationEditText = (EditText) findViewById(R.id.etxt_duration);
-        nameEditText.setText(excercise.getName());
-        durationEditText.setText(String.valueOf(excercise.getDuration()));
+        durationEditText.setText(String.valueOf(Constants.DEFAULT_EXCERCISE_DURATON));
 
         ListView excerciseList = (ListView) findViewById(R.id.lst_excercises);
-        String[] excercises = getResources().getStringArray(R.array.excercise_names);
-        AddExcerciseAdapter addExcerciseAdapter = new AddExcerciseAdapter(this, excercises);
+        //String[] excercises = getResources().getStringArray(R.array.excercise_names);
+        ArrayList<Excercise> excerciseArrayList = getAvailableExcercises();
+        final AddExcerciseAdapter addExcerciseAdapter = new AddExcerciseAdapter(this, excerciseArrayList);
         excerciseList.setAdapter(addExcerciseAdapter);
 
         Button btnOk = (Button) findViewById(R.id.btn_ok);
@@ -41,10 +43,12 @@ public class AddExcerciseActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String excerciseName = nameEditText.getText().toString();
-                String excerciseDuration = durationEditText.getText().toString();
+               // String excerciseName = nameEditText.getText().toString();
+                //String excerciseDuration = durationEditText.getText().toString();
+                ArrayList<Excercise> selectedExcercises = addExcerciseAdapter.getSelectedExcercises();
                 Intent intent = new Intent();
-                intent.putExtra("ExcerciseObject", new Excercise(excerciseName, Integer.parseInt(excerciseDuration)));
+                //intent.putExtra("ExcerciseObject", new Excercise(excerciseName, Integer.parseInt(excerciseDuration)));
+                intent.putExtra("ExcerciseObjects", selectedExcercises);
                 intent.putExtra("ExcerciseIndex", excerciseIndex);
                 setResult(Constants.ACTION_EDIT_EXERCISE_YES, intent);
                 finish();
@@ -59,26 +63,54 @@ public class AddExcerciseActivity extends AppCompatActivity {
         });
     }
 
+    private ArrayList<Excercise> getAvailableExcercises(){
+        ArrayList<Excercise> excerciseArrayList = new ArrayList<Excercise>();
+        String[] excercises = getResources().getStringArray(R.array.excercise_names);
+        for (int i =0; i < excercises.length; i++) {
+            Excercise excercise = new Excercise(excercises[i], Constants.DEFAULT_EXCERCISE_DURATON);
+            excerciseArrayList.add(excercise);
+        }
+
+        return excerciseArrayList;
+    }
+
+
     public class AddExcerciseAdapter extends BaseAdapter {
 
         private Context mContext;
-        private HashMap<String, Boolean> mExcercises;
-        public AddExcerciseAdapter(Context context, String[] excercises) {
+        private HashMap<Excercise, Boolean> mExcercises;
+        private ArrayList<Excercise> mExcerciseArrayList;
+        public AddExcerciseAdapter(Context context, ArrayList<Excercise> excerciseArrayList) {
             mContext = context;
-            mExcercises = new HashMap<String, Boolean>();
+            mExcerciseArrayList = excerciseArrayList;
+            mExcercises = new HashMap<Excercise, Boolean>();
+            for(Excercise excercise : mExcerciseArrayList){
+                mExcercises.put(excercise, false);
+            }
+            /*mExcercises = new HashMap<String, Boolean>();
             for (int i =0; i < excercises.length; i++) {
               mExcercises.put(excercises[i], false);
-            }
+            }*/
         }
+
+       public ArrayList<Excercise> getSelectedExcercises() {
+           ArrayList<Excercise> selectedExcercises = new ArrayList<Excercise>();
+           for(Excercise excercise:mExcerciseArrayList) {
+               if(mExcercises.get(excercise) != null && mExcercises.get(excercise) == true) {
+                   selectedExcercises.add(excercise);
+               }
+           }
+           return selectedExcercises;
+       }
 
         @Override
         public int getCount() {
-            return mExcercises.size();
+            return mExcerciseArrayList.size();
         }
 
         @Override
         public Object getItem(int index) {
-            return mExcercises.keySet().toArray()[index];
+            return mExcerciseArrayList.get(index);
         }
 
         @Override
@@ -92,21 +124,34 @@ public class AddExcerciseActivity extends AppCompatActivity {
                 LayoutInflater infalInflater = LayoutInflater.from(mContext);
                 view = infalInflater.inflate(R.layout.select_excercise_list_item, viewGroup, false);
             } else {
-                TextView txtExcercise = (TextView) view.findViewById(R.id.txt_excercise_name);
+                /*TextView txtExcercise = (TextView) view.findViewById(R.id.txt_excercise_name);
                 CheckBox chkExcercise = (CheckBox) view.findViewById(R.id.chk_excercise);
-                String excerciseName = (String)view.getTag();
+                Excercise excercise = (Excercise)view.getTag();
                 Boolean isChecked = chkExcercise.isChecked();
-                mExcercises.put(excerciseName, isChecked);
+                mExcercises.put(excercise, isChecked);*/
             }
+            Excercise excercise = (Excercise) getItem(index);
             ImageView imgExcercise = (ImageView) view.findViewById(R.id.img_excercise);
             TextView txtExcercise = (TextView) view.findViewById(R.id.txt_excercise_name);
             CheckBox chkExcercise = (CheckBox) view.findViewById(R.id.chk_excercise);
-            String excercisesName = (String)mExcercises.keySet().toArray()[index];
-            Boolean isChecked = mExcercises.get(excercisesName);
-            txtExcercise.setText(excercisesName);
+            chkExcercise.setTag(excercise);
+            setupCheckStateChanged(chkExcercise);
+            boolean isChecked = mExcercises.get(excercise);
+            txtExcercise.setText(excercise.getName());
             chkExcercise.setChecked(isChecked);
-            view.setTag(excercisesName);
             return view;
+        }
+
+        private void setupCheckStateChanged(CheckBox checkBox) {
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox chkBox = (CheckBox) view;
+                    boolean isChecked = chkBox.isChecked();
+                    Excercise excercise = (Excercise) chkBox.getTag();
+                    mExcercises.put(excercise, isChecked);
+                }
+            });
         }
     }
 }
