@@ -1,0 +1,36 @@
+{
+  "name":"intermediate",
+  "excercises":[
+    {
+      "name":"High Knees",
+      "duration":45
+    },
+    {
+      "name":"Plank Jacks",
+      "duration":45
+    },
+    {
+      "name":"Butt Kick",
+      "duration":45
+    },
+    {
+      "name":"High Knees",
+      "duration":45
+    },
+    {
+      "name":"Plank Jacks",
+      "duration":45
+    },
+    {
+      "name":"Butt Kick",
+      "duration":45
+    }
+  ],
+  "numOfSets":3,
+  "restDurationBetweenSets":45,
+  "restDurationBetweenExercises":10,
+  "warmUpDuration":30,
+  "coolDownDuration":30,
+  "id":20001,
+  "userCreated":false
+}

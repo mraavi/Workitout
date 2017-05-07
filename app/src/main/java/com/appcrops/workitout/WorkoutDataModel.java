@@ -6,8 +6,7 @@ import android.content.SharedPreferences;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -69,6 +68,7 @@ public class WorkoutDataModel {
         mContext = context;
         mSavedWorkoutNames = new ArrayList<String>();
         mSavedWorkouts = new ArrayList<Workout>();
+        loadDefaultWorkouts();
         loadSavedWorkouts();
 
         /*if (mSavedWorkouts.size() > 0) {
@@ -90,6 +90,7 @@ public class WorkoutDataModel {
     public void createNewWorkout() {
         mWorkout = new Workout();
         mWorkout.setId(getNewWorkoutId());
+        Group.EXCERCISES.numOfchildren = getNumOfExcercises();
        // addExcercise();
     }
 
@@ -257,13 +258,17 @@ public class WorkoutDataModel {
 
     public void saveWorkout() {
         try {
-            FileOutputStream outStream = null;
             String workoutName = mWorkout.getName();
             File file = new File(mContext.getFilesDir(), File.pathSeparator + workoutName);
-            outStream = new FileOutputStream(file);
-            ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
-            objectOutStream.writeObject(mWorkout);
-            objectOutStream.close();
+            FileOutputStream outStream = new FileOutputStream(file);
+            String jsonWorkout = mWorkout.toJson();
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outStream);
+            outputStreamWriter.write(jsonWorkout);
+            //ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
+            //objectOutStream.writeObject(mWorkout);
+            //objectOutStream.close();
+            outputStreamWriter.close();
+            outStream.close();
             saveWorkoutName(workoutName);
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,7 +290,7 @@ public class WorkoutDataModel {
         String workoutName = mWorkout.getName();
         for (Workout savedWorkout: mSavedWorkouts) {
             String savedWorkoutName = savedWorkout.getName();
-            if(savedWorkout.getId() != mWorkout.getId() && (workoutName.compareToIgnoreCase(savedWorkoutName) == 0)){
+            if((!savedWorkout.getuserCreated() || savedWorkout.getId() != mWorkout.getId()) && (workoutName.compareToIgnoreCase(savedWorkoutName) == 0)){
                 result = true;
                 break;
             }
@@ -293,30 +298,43 @@ public class WorkoutDataModel {
         return result;
     }
 
-    public void loadSavedWorkouts () {
+    private void loadDefaultWorkouts(){
+        String[] defaultWorkouts = Constants.DEFAULT_WORKOUTS;
+        for(String defaultworkout:defaultWorkouts) {
+            String jsonWorkout = Utils.loadJSONFromAsset(mContext, defaultworkout);
+            Workout workout = Workout.fromJson(jsonWorkout);
+            mSavedWorkouts.add(workout);
+            mSavedWorkoutNames.add(workout.getName());
+        }
+    }
+
+    private void loadSavedWorkouts () {
         SharedPreferences prefs = mContext.getSharedPreferences(mContext.getPackageName() + "workout", Context.MODE_PRIVATE);
         Set<String> workoutSet = prefs.getStringSet("names", null);
         if (workoutSet != null) {
-            mSavedWorkoutNames.clear();
             mSavedWorkoutNames.addAll(workoutSet);
-
-            mSavedWorkouts.clear();
             for (String workoutName : mSavedWorkoutNames) {
-                Workout workout = getWorkout(workoutName);
-                mSavedWorkouts.add(workout);
+                Workout workout = loadWorkout(workoutName);
+                if(workout!=null) {
+                    mSavedWorkouts.add(workout);
+                }
             }
         }
     }
 
-    private Workout getWorkout(String workoutName) {
+    private Workout loadWorkout(String workoutName) {
         Workout workout = null;
         try {
-            FileInputStream inStream = null;
             File file = new File(mContext.getFilesDir(), File.pathSeparator + workoutName);
-            inStream = new FileInputStream(file);
-            ObjectInputStream objectInStream = new ObjectInputStream(inStream);
-            workout = (Workout) objectInStream.readObject();
-            objectInStream.close();
+            byte[] bytes = new byte[(int)file.length()];
+            FileInputStream inStream = new FileInputStream(file);
+            inStream.read(bytes);
+            inStream.close();
+            String jsonString = new String(bytes);
+            workout = Workout.fromJson(jsonString);
+            //ObjectInputStream objectInStream = new ObjectInputStream(inStream);
+            //workout = (Workout) objectInStream.readObject();
+            //objectInStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

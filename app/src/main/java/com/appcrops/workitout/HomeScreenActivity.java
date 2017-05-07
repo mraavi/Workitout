@@ -41,13 +41,13 @@ public class HomeScreenActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
                 ArrayList<Workout> workoutList = mWorkoutDataModel.getSavedWorkouts();
-                mWorkoutDataModel.setWorkout(workoutList.get(index));
+                Workout workout = new Workout(workoutList.get(index));
+                mWorkoutDataModel.setWorkout(workout);
                 Intent intent = new Intent(HomeScreenActivity.this, WorkoutActivity.class);
                 startActivity(intent);
             }
         });
     }
-
 
     public class WorkoutListAdapter extends BaseAdapter {
         ArrayList<Workout> mWorkoutList;

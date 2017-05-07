@@ -65,7 +65,7 @@ public class WorkoutActivity extends AppCompatActivity {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWorkoutDataModel.saveWorkout();
+                //mWorkoutDataModel.saveWorkout();
                 Intent intent = new Intent(WorkoutActivity.this, PerformWorkoutActivity.class);
                 intent.putExtra("WorkoutObject", mWorkoutDataModel.getCurrentWorkout());
                 startActivity(intent);

@@ -1,5 +1,7 @@
 package com.appcrops.workitout;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -72,6 +74,14 @@ public class Workout implements Serializable {
         this.id = id;
     }
 
+    public boolean getuserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(boolean userCreated) {
+        this.userCreated = userCreated;
+    }
+
     public  Workout() {
         name = "Challenge";
         excercises = new ArrayList<Excercise>();
@@ -81,6 +91,28 @@ public class Workout implements Serializable {
         warmUpDuration = 0;
         coolDownDuration = 0;
         id = 0;
+        userCreated = true;
+    }
+
+    public  Workout(final Workout workout) {
+        this.name = new String(workout.name);
+        this.excercises = new ArrayList<Excercise>(workout.excercises);
+        this.numOfSets = workout.numOfSets;
+        this.restDurationBetweenExercises = workout.restDurationBetweenExercises;
+        this.restDurationBetweenSets = workout.restDurationBetweenSets;
+        this.warmUpDuration = workout.warmUpDuration;
+        this.coolDownDuration = workout.coolDownDuration;
+        this.id = workout.id;
+        this.userCreated = true;
+    }
+
+    public static Workout fromJson(String jsonString) {
+        Workout workout = new Gson().fromJson(jsonString, Workout.class);
+        return workout;
+    }
+
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 
     private String name;
@@ -91,4 +123,5 @@ public class Workout implements Serializable {
     private int warmUpDuration;
     private int coolDownDuration;
     private int id;
+    private boolean userCreated;
 }
