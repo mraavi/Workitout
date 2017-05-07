@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "768103603564",
+    "firebase_url": "https://workitout-b3c76.firebaseio.com",
+    "project_id": "workitout-b3c76",
+    "storage_bucket": "workitout-b3c76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768103603564:android:b29b894c6918b85b",
+        "android_client_info": {
+          "package_name": "com.appcrops.workitout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768103603564-9jo6pv69etngqkfde5is4g8b2v953d1r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appcrops.workitout",
+            "certificate_hash": "54a3fed72de24654444cab4fd935ae2415608d6b"
+          }
+        },
+        {
+          "client_id": "768103603564-r79hhvjdda8nf1844gst9mgt6pst6fjh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-reGUH-9GyT_GNLtsm-sGZjaDs7kKehs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768103603564-r79hhvjdda8nf1844gst9mgt6pst6fjh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
