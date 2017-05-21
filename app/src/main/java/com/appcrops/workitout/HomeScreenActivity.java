@@ -49,6 +49,14 @@ public class HomeScreenActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(ProfileManager.instance().getName() != null) {
+            getSupportActionBar().setTitle(ProfileManager.instance().getName());
+        }
+    }
+
     public class WorkoutListAdapter extends BaseAdapter {
         ArrayList<Workout> mWorkoutList;
         Context mContext;

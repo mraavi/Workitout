@@ -10,11 +10,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".WorkoutActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".AddExcerciseActivity" />
         <activity android:name=".PerformWorkoutActivity" />
         <activity android:name=".HomeScreenActivity">
+        </activity>
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

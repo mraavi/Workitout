@@ -53,6 +53,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 if(!mWorkoutDataModel.isWorkoutNameExist()) {
                     mWorkoutDataModel.saveWorkout();
                     Intent intent = new Intent(WorkoutActivity.this, HomeScreenActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 } else {
